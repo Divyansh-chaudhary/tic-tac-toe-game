@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            min-height: 100vh;
+        }
+        table {
+            margin: 4rem auto 0;
+            border-collapse: collapse;
+            box-shadow: 3px 3px 10px #aaa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        td {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 2.5rem;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        td:hover {
+            background-color: #ddd;
+        }
+        button {
+            padding: 5px 12px;
+            border: 0;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            display: block;
+            background-color: #333;
+            margin: auto ;
+            color: white;
+        }
+        #msg {
+            color: green;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            text-align: center;
+            margin: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <table border="1">
+        <tbody>
+            <tr>
+                <td data-item="0"></td>
+                <td data-item="1"></td>
+                <td data-item="2"></td>
+            </tr>
+            <tr>
+                <td data-item="3"></td>
+                <td data-item="4"></td>
+                <td data-item="5"></td>
+            </tr>
+            <tr>
+                <td data-item="6"></td>
+                <td data-item="7"></td>
+                <td data-item="8"></td>
+            </tr>
+        </tbody>
+    </table>
+    <h1 id="msg"></h1>
+    <button onclick="restartGame()">Restart Game</button>
+    <script>
+        let palyer1 = true;
+        let player2 = false;
+
+        let p1Symbol = "x", p2Symbol = "o";
+
+        const allTD = document.getElementsByTagName("td")
+        const combination = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+        const restartGame = () => {
+            for(let i=0; i<allTD.length;i++){
+                allTD[i].innerHTML = "";
+            }
+            document.getElementById("msg").innerHTML=""
+        }
+
+        const action = (e)=>{
+            if(allTD[e.target.getAttribute("data-item")].innerHTML === ""){
+                let symbol = "k";
+                if(palyer1) {
+                    symbol=p1Symbol;
+                    palyer1=false;
+                    player2=true;
+                } else {
+                    symbol=p2Symbol;
+                    palyer1=true;
+                    player2=false;
+                }
+                allTD[e.target.getAttribute("data-item")].innerHTML = symbol;
+                combination.forEach(el => {
+                    console.log(allTD[el[0]])
+                    if(allTD[el[0]].innerHTML === "x" && allTD[el[1]].innerHTML === "x" && allTD[el[2]].innerHTML === "x") {
+                        document.getElementById("msg").innerHTML="player 1 has won";
+                        setTimeout(restartGame, 2000)
+                    } else if (allTD[el[0]].innerHTML === "o" && allTD[el[1]].innerHTML === "o" && allTD[el[2]].innerHTML === "o"){
+                        document.getElementById("msg").innerHTML="player2 has won";
+                        setTimeout(restartGame, 2000)
+                    } 
+                })
+            }
+        }
+
+        for(let i=0; i<allTD.length;i++){
+            allTD[i].onclick = action;
+        }
+    </script>
+</body>
+</html>
